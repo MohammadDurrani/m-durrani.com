@@ -1,0 +1,25 @@
+---
+export interface Props {
+  href: string;
+  label: string;
+}
+
+const { href, label } = Astro.props;
+const currentPath = Astro.url.pathname;
+
+const normalizedCurrentPath = currentPath.endsWith('/') || currentPath.includes('.') ? currentPath : currentPath + '/';
+const normalizedHref = href.endsWith('/') || href.includes('.') ? href : href + '/';
+
+let isActive = false;
+
+if (href === "/" || href === "./") {
+  isActive = normalizedCurrentPath === "/" || normalizedCurrentPath === "/index.html";
+} else {
+  isActive = normalizedHref !== "/" && normalizedCurrentPath.startsWith(normalizedHref);
+}
+---
+<li>
+  <a href={href} class:list={{ "active-link": isActive }}>
+    {label}
+  </a>
+</li>

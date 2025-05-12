@@ -1,16 +1,39 @@
 ---
-
+import MainLayout from '../layouts/MainLayout.astro';
+import MainBox from '../components/MainBox.astro';
 ---
+<MainLayout title="Mohammad Durrani">
+    <MainBox>
+        <h1>about me, my values, and my interests</h1>
+    </MainBox>
+    <div class="content large-paragraph">
+        
+        <p>Hey. I'm Mohammad Durrani, a Full-Stack Web Developer and Writer from Pakistan. The primary function of this space is to consolidate projects I've worked on. Beyond that, I hope it provides insight not only into the problems and conceptual areas that interest me, but also into the core principles that guide my work.</p>
+        <p>I welcome opportunities for collaboration, be it on current or new projects. Should our interests align, I'd be pleased to hear from you.</p>
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+    </div>
+    <h2>> Values</h2>
+        <div class="content">
+            <p> The projects I work on should be ethical.  </p>
+            <p> Accessibility Standards have to be met, wherever applicable.</p>
+            <p>  </p>
+            <p>          </p>
+        
+        </div>
+    <h2>> Interests</h2>
+        <div class="content">
+            <p> Software that is performant, secure and reliable. </p>
+            <p> Open Source Software </p>
+            <p> Writing well </p>
+            <p> The challenges faced by developing countries, and potential solutions </p>
+            <p> A stable, united South Asia </p>
+            <p> Clean Air </p>
+            <p> Chess </p>
+            <p> World of Warcraft </p>
+            <p> FromSoftware Games</p>
+            <p> Hideo Kojima Games</p>
+            <p> Indie Games </p>
+            <p> Televsion and Film </p>
+            <p> Music </p>
+        </div>
+</MainLayout>
