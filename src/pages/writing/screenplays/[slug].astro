@@ -1,0 +1,41 @@
+---
+// src/pages/writing/screenplays/[slug].astro
+import { type CollectionEntry, getCollection } from 'astro:content';
+import MainLayout from '../../../layouts/MainLayout.astro'; // Adjust path if layout is elsewhere
+
+export async function getStaticPaths() {
+  const screenplays = await getCollection('screenplays');
+  return screenplays.map((entry: CollectionEntry<'screenplays'>) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'screenplays'>;
+}
+
+const { entry } = Astro.props as Props;
+const { Content } = await entry.render();
+---
+<MainLayout pageTitle={entry.data.title}>
+  <article class="prose lg:prose-xl mx-auto py-8">
+    <h1>{entry.data.title}</h1>
+    {entry.data.logline && <p class="lead font-semibold">Logline: {entry.data.logline}</p>}
+    {/* If you add 'pdfUrl' to your schema like: pdfUrl: z.string().url().optional()
+      You can add a link like this:
+      {entry.data.pdfUrl && (
+        <a href={entry.data.pdfUrl} target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline my-4 inline-block">
+          Read Screenplay (PDF)
+        </a>
+      )}
+    */}
+    {/* Consider adding a publishDate or status field to your schema if you want to display it.
+      <p class="text-sm text-gray-600">Status: {entry.data.status}</p> 
+    */}
+    <hr class="my-6"/>
+    <div class="screenplay-content"> {/* You might want specific styling for screenplay format */}
+      <Content /> {/* Main content from your Markdown/MDX file (e.g., excerpts, notes, or the full text if formatted) */}
+    </div>
+  </article>
+</MainLayout>

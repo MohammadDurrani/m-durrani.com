@@ -1,0 +1,31 @@
+---
+// src/pages/writing/blog/[slug].astro
+import { type CollectionEntry, getCollection } from 'astro:content';
+import MainLayout from '../../../layouts/MainLayout.astro'; // Adjust path if layout is elsewhere
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((entry: CollectionEntry<'blog'>) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'blog'>;
+}
+
+const { entry } = Astro.props as Props;
+const { Content } = await entry.render();
+---
+<MainLayout pageTitle={entry.data.title}>
+  <article class="prose lg:prose-xl mx-auto py-8">
+    <h1>{entry.data.title}</h1>
+    <p class="text-sm text-gray-600">
+      Published on: {entry.data.publishDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+    </p>
+    {entry.data.description && <p class="lead italic">{entry.data.description}</p>}
+    <hr class="my-6"/>
+    <Content />
+  </article>
+</MainLayout>

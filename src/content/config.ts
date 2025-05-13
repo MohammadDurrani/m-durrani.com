@@ -59,6 +59,6 @@ export const collections = {
   'dev': devCollection,
   'essays': essaysCollection,
   'screenplays': screenplaysCollection,
-  'stories': storiesCollection,
+  'short-stories': storiesCollection, // <<< MUST BE EXACTLY THIS KEY
   'blog': blogCollection, // Include if you create this collection
 };

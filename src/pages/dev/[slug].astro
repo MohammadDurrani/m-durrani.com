@@ -1,0 +1,47 @@
+---
+// src/pages/dev/[slug].astro
+import { type CollectionEntry, getCollection } from 'astro:content';
+import MainLayout from '../../layouts/MainLayout.astro'; // Adjust path if layout is elsewhere
+
+export async function getStaticPaths() {
+  const projects = await getCollection('dev');
+  return projects.map((entry: CollectionEntry<'dev'>) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'dev'>;
+}
+
+const { entry } = Astro.props as Props;
+const { Content } = await entry.render();
+---
+<MainLayout pageTitle={entry.data.title}>
+  <article class="prose lg:prose-xl mx-auto py-8"> {/* Basic styling example */}
+    <h1>{entry.data.title}</h1>
+    {entry.data.description && <p class="lead">{entry.data.description}</p>}
+    
+    {entry.data.imageUrl && (
+      <img src={entry.data.imageUrl} alt={entry.data.title} class="my-6 rounded-lg shadow-md" />
+    )}
+
+    <div class="my-6">
+      <Content /> {/* Main content from your Markdown/MDX file */}
+    </div>
+
+    <div class="mt-8 flex space-x-4">
+      {entry.data.liveUrl && (
+        <a href={entry.data.liveUrl} target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">
+          View Live Project
+        </a>
+      )}
+      {entry.data.repoUrl && (
+        <a href={entry.data.repoUrl} target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">
+          View Repository
+        </a>
+      )}
+    </div>
+  </article>
+</MainLayout>
