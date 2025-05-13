@@ -1,0 +1,30 @@
+---
+// src/pages/writing/essays/[slug].astro
+import { type CollectionEntry, getCollection } from 'astro:content';
+import MainLayout from '../../../layouts/MainLayout.astro'; // Your main layout
+
+export async function getStaticPaths() {
+  const essays = await getCollection('essays');
+  return essays.map(entry => ({
+    params: { slug: entry.slug }, // slug comes from the filename
+    props: { entry },
+  }));
+}
+
+// Type safety for the entry prop
+interface Props {
+  entry: CollectionEntry<'essays'>;
+}
+
+const { entry } = Astro.props as Props;
+const { Content } = await entry.render(); // Renders the Markdown content
+---
+<MainLayout pageTitle={entry.data.title}>
+  <h1>{entry.data.title}</h1>
+  <p>Published on: {entry.data.publishDate.toLocaleDateString()}</p>
+  {entry.data.description && <p><em>{entry.data.description}</em></p>}
+  <hr />
+  <article>
+    <Content /> {/* Your essay content goes here */}
+  </article>
+</MainLayout>
