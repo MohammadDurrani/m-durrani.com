@@ -82,6 +82,35 @@ body {
     justify-content: flex-start;
 }
 
+/* Prevent horizontal scroll */
+html {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+body {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; /* Change from center to stretch */
+}
+
+.container {
+    width: min(100%, 82rem);  /* Use min() for better responsiveness */
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2rem 1rem;
+    position: relative;
+    z-index: 10;
+    box-sizing: border-box;
+}
+
 /* TYPOGRAPHY */
 h1, h2, h3 {
     font-family: 'Lora', serif;
@@ -565,6 +594,9 @@ opacity: 1; /* Always visible */
     .navbar {
         padding: 0.5rem 0.5rem;
         width: 100%;
+                max-width: fit-content;
+        margin: 1em auto;
+        padding: 1em;
     }
     .navbar-list {
         gap: 1rem;
@@ -593,11 +625,11 @@ opacity: 1; /* Always visible */
 
 /* WRITING PAGE STYLES */
 .writing-page {
+    width: 100%;
     max-width: 82rem;
     margin: 0 auto;
     padding: 2rem 1rem;
-    position: relative;
-    z-index: 10;
+    box-sizing: border-box;
 }
 .writing-page .page-header {
     margin-bottom: 4rem;
@@ -651,7 +683,6 @@ opacity: 1; /* Always visible */
     padding: 3rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;
 }
 .writing-page .featured-text h2 {
     font-size: 2rem;
@@ -668,18 +699,22 @@ opacity: 1; /* Always visible */
 .writing-page .featured-image {
     position: relative;
     overflow: hidden;
+    padding: 1rem;
+    border-radius: 0.75rem; /* Round all corners of the container */
 }
 .writing-page .image-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    position: relative; /* Change from absolute */
+    height: 100%;
+    border-radius: 0.75rem; /* Round all corners of the image container */
+    overflow: hidden;
 }
 .writing-page .featured-image img {
     width: 100%;
+        max-height: 400px;
+
     height: 100%;
     object-fit: cover;
+    border-radius: 0.75rem; /* Round all corners of the image itself */
 }
 .writing-page .tag {
     display: inline-block;
@@ -851,26 +886,36 @@ opacity: 1; /* Always visible */
 /* Responsive Adjustments for Writing Page */
 @media (max-width: 1024px) {
     .writing-page .featured-content {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
     }
+
+    .writing-page .featured-text {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Force the order: tag -> image -> text */
+    .writing-page .tag {
+        order: 1;
+    }
+
     .writing-page .featured-image {
-        position: static;
-        height: 16rem;
+        order: 2;
+        margin: 1rem 0;  /* Add some spacing */
+        height: 300px;   /* Maintain good proportions on mobile */
     }
-    .writing-page .image-container {
-        position: static;
-        height: 100%;
+
+    .writing-page .featured-text h2 {
+        order: 3;
     }
-    .writing-page .entries-grid {
-        grid-template-columns: repeat(2, 1fr);
+
+    .writing-page .featured-text p {
+        order: 4;
     }
-    .writing-page .magazine-content {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-    .writing-page .issue {
-        max-width: 14rem;
-        margin: 0 auto;
+
+    .writing-page .read-more {
+        order: 5;
     }
 }
 @media (max-width: 768px) {
@@ -1079,7 +1124,10 @@ opacity: 1; /* Always visible */
 
 /* Footer */
         .footer {
-            width: 82em;
+            width: min(100%, 82em);
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
             background: rgba(15, 15, 15, 0.9);
             backdrop-filter: blur(20px);
             border-top: 1px solid rgba(255, 255, 255, 0.1);
