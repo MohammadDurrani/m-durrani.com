@@ -1,0 +1,139 @@
+---
+import MainLayout from "../../layout/MainLayout.astro"
+const pageTitle = "M Durrani | Writing"
+---
+
+<MainLayout pageTitle={pageTitle}>
+		   <div class="container writing-page">
+        <header class="page-header">
+            <h1>Writing</h1>
+            <p class="subtitle">A collection of my written work across various formats and subjects.</p>
+        </header>
+
+        <!-- Featured Writing Section -->
+        <section class="featured-section">
+            <div class="featured-content">
+                <div class="featured-text">
+                    <span class="tag">Featured</span>
+                    <h2>The Future of Ethical Technology in South Asia</h2>
+                    <p>An exploration of how ethical technology practices can address unique challenges in the developing world, with a focus on accessibility, privacy, and sustainable innovation.</p>
+                    <a href="/writing/essays/ethical-tech-south-asia" class="read-more">Read essay →</a>
+                </div>
+                <div class="featured-image">
+                    <div class="image-container">
+                        <!-- Replace with your actual featured image -->
+                        <img src="/images/featured-writing.jpg" alt="Featured essay illustration" />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+
+        <!-- Recent Blog Posts -->
+        <section class="writing-section blog-section">
+            <div class="section-header">
+                <h2>Recent Blog Posts</h2>
+                <a href="/writing/blog" class="view-all">View all posts →</a>
+            </div>
+            
+            <div class="entries-grid blog-entries">
+                <a href="/writing/blog/post-1" class="entry">
+                    <span class="entry-date">May 15, 2025</span>
+                    <h3>Designing for Invisible Accessibility</h3>
+                    <p>How subtle design choices can dramatically improve accessibility without compromising aesthetics.</p>
+                </a>
+                
+                <a href="/writing/blog/post-2" class="entry">
+                    <span class="entry-date">April 30, 2025</span>
+                    <h3>The Return to Minimalism in Digital Spaces</h3>
+                    <p>Examining the growing trend away from information overload toward focused, intentional digital experiences.</p>
+                </a>
+                
+                <a href="/writing/blog/post-3" class="entry">
+                    <span class="entry-date">April 12, 2025</span>
+                    <h3>Performance as an Ethical Consideration</h3>
+                    <p>Why optimizing for performance isn't just technical—it's an ethical imperative for inclusive development.</p>
+                </a>
+            </div>
+        </section>
+        <!-- Essays and Stories Grid -->
+        <div class="two-column-grid">
+            <!-- Essays Section -->
+            <section class="writing-section">
+                <div class="section-header">
+                    <h2>Essays</h2>
+                    <a href="/writing/essays" class="view-all">View all essays →</a>
+                </div>
+                
+                <div class="entries-list">
+                    <a href="/writing/essays/essay-1" class="entry">
+                        <span class="entry-date">March 2025</span>
+                        <h3>The Digital Divide in Education</h3>
+                    </a>
+                    
+                    <a href="/writing/essays/essay-2" class="entry">
+                        <span class="entry-date">February 2025</span>
+                        <h3>Writing as a Technical Skill</h3>
+                    </a>
+                    
+                    <a href="/writing/essays/essay-3" class="entry">
+                        <span class="entry-date">January 2025</span>
+                        <h3>Open Source and Knowledge Sharing</h3>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Stories & Screenplays Section -->
+            <section class="writing-section">
+                <div class="section-header">
+                    <h2>Fiction</h2>
+                    <a href="/writing/fiction" class="view-all">View all fiction →</a>
+                </div>
+                
+                <div class="entries-list">
+                    <a href="/writing/fiction/story-1" class="entry">
+                        <span class="entry-date">Short Story • April 2025</span>
+                        <h3>The Last Engineer</h3>
+                    </a>
+                    
+                    <a href="/writing/fiction/screenplay-1" class="entry">
+                        <span class="entry-date">Screenplay • March 2025</span>
+                        <h3>Monsoon Protocol</h3>
+                    </a>
+                    
+                    <a href="/writing/fiction/story-2" class="entry">
+                        <span class="entry-date">Short Story • January 2025</span>
+                        <h3>The Memory Merchants</h3>
+                    </a>
+                </div>
+            </section>
+        </div>
+        <!-- Magazine Section -->
+        <section class="magazine-section">
+            <div class="magazine-content">
+                <div class="magazine-info">
+                    <span class="tag accent">Editor in Chief</span>
+                    <h2>Proudly Pakistani</h2>
+                    <p>A monthly publication, Proudly Pakistani is a bold, unfiltered celebration of Pakistan’s kaleidoscopic identity. Dive into untold stories of artists, rebels, and everyday heroes redefining tradition and modernity. From Lahore’s neon-lit streets to Hunza’s silent peaks, we amplify voices often unheard—featuring raw art, fiery activism, forgotten histories, and recipes that taste like home. This isn’t nostalgia; it’s a revolution in ink. Click to explore why “Pakistaniyat” is more than a label—it’s a heartbeat. </p>
+                    <div class="magazine-links">
+                        <a href="/writing/magazine" class="magazine-link">About the publication →</a>
+                        <a href="https://proudlypakistani.com" class="magazine-link">Visit magazine →</a>
+                    </div>
+                </div>
+                <div class="magazine-issues">
+                    <div class="issue">
+                        <div class="issue-cover">
+                            <!-- Replace with actual magazine cover -->
+                            <img src="/images/magazine-latest.jpg" alt="Latest magazine issue cover" />
+                        </div>
+                        <div class="issue-info">
+                            <span>Latest Issue</span>
+                            <p>July 2025: "Coming Soon"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</MainLayout>

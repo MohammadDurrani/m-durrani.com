@@ -1,0 +1,33 @@
+---
+// filepath: src/components/Header.astro
+const { pathname } = Astro.url;
+const navLinks = [
+  { href: "/", label: "Home" },
+  { href: "/dev", label: "Dev" },
+  { href: "/writing", label: "Writing" },
+];
+---
+<header>
+  <nav class="navbar">
+    <div class="navbar-glow"></div>
+    <ul class="navbar-list">
+  {navLinks.map((link, index) => {
+    const isActive = link.href === "/"
+      ? pathname === "/"
+      : pathname.startsWith(link.href);
+    return (
+      <li class="nav-item">
+        <div class={`nav-indicator${isActive ? " active" : ""}`}></div>
+        <a
+          href={link.href}
+          class={`nav-link${isActive ? " active" : ""}`}
+          data-index={index}
+        >
+          <span class="nav-text">{link.label}</span>
+        </a>
+      </li>
+    );
+  })}
+</ul>
+  </nav>
+</header>

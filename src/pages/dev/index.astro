@@ -1,0 +1,34 @@
+---
+import { getCollection } from 'astro:content';
+import ProjectCard from "../../components/ProjectCard.astro";
+import MainLayout from "../../layout/MainLayout.astro";
+const pageTitle = "M Durrani | Dev";
+
+// Fetch all projects from the 'dev' collection
+const projects = (await getCollection('dev'))
+    .sort((a, b) => {
+        const dateA = a.data.publishDate ? new Date(a.data.publishDate) : new Date(0);
+        const dateB = b.data.publishDate ? new Date(b.data.publishDate) : new Date(0);
+        return dateB.getTime() - dateA.getTime(); // Most recent first
+    });
+---
+
+<MainLayout pageTitle={pageTitle}>
+    <div class="container">
+        <h1>Web Development</h1>
+        <p class="projects-intro">A collection of software projects I've built, focusing on performance, accessibility, and ethical design principles.</p>
+        
+        <div class="projects-grid">
+            {projects.map(project => (
+                <a href={`/dev/${project.slug}`} class="card-link">
+                    <ProjectCard 
+    title={project.data.title ?? ""}
+    description={project.data.description ?? ""}
+    image={project.data.imageUrl ?? ""}
+    tags={project.data.tags ?? []}
+/>
+                </a>
+            ))}
+        </div>
+    </div>
+</MainLayout>

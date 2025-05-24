@@ -1,0 +1,40 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import MainLayout from '../../layout/MainLayout.astro';
+
+export async function getStaticPaths() {
+  const devProjects = await getCollection('dev');
+  return devProjects.map((project) => ({
+    params: { slug: project.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect('/dev');
+}
+
+const project = await getEntry('dev', slug);
+
+if (!project) {
+  return Astro.redirect('/404');
+}
+
+const { title, description, imageUrl, tags = [] } = project.data;
+const { Content } = await project.render();
+---
+
+<MainLayout pageTitle={title}>
+  <div class="container">
+    <h1>{title}</h1>
+    {imageUrl && <img src={imageUrl} alt={title} style="max-width:400px;"/>}
+    <p>{description}</p>
+    <div>
+      {tags.map((tag: string) => <span class="tag">{tag}</span>)}
+    </div>
+    <article class="project-body">
+      <Content />
+    </article>
+  </div>
+</MainLayout>

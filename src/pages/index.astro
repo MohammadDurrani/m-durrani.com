@@ -1,16 +1,85 @@
 ---
-
+import MainLayout from "../layout/MainLayout.astro";
+const pageTitle = "M Durrani | Home"
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<MainLayout pageTitle={pageTitle}>
+		<div class="container">
+			<main>
+				<section class="hero-section">
+					<div class="glass-panel">
+						<h1 class="animated-title">Mohammad Durrani</h1>
+						<div class="title-underline"></div>
+						<div class="hero-content">
+							<p class="intro-text">Hey. I'm Mohammad, a <span class="highlight">Full-Stack Web Developer</span> and <span class="highlight">Writer</span> from Pakistan. The primary function of this space is to consolidate projects I've worked on. Beyond that, I hope it provides insight not only into the problems and conceptual areas that interest me, but also into the core principles that guide my work.</p>
+							<p>I welcome opportunities for collaboration, be it on current or new projects. Should our interests align, I'd be pleased to hear from you.</p>
+						</div>
+					</div>
+				</section>
+				
+				<section class="values-section">
+					<div class="glass-panel">
+						<h2>Values <span class="section-accent"></span></h2>
+						<div class="content-grid">
+							<div class="value-item">
+								<span class="value-number">01</span>
+								<p>The projects I work on should be <span class="emphasis">ethical</span> and contribute positively to society. I evaluate potential work through this lens first and foremost.</p>
+							</div>
+							<div class="value-item">
+								<span class="value-number">02</span>
+								<p><span class="emphasis">Accessibility standards</span> must be met in all my work. Digital experiences should be inclusive and usable by everyone, regardless of ability.</p>
+							</div>
+							<div class="value-item">
+								<span class="value-number">03</span>
+								<p><span class="emphasis">No dark patterns</span> - I refuse to implement design tricks that manipulate users or compromise their agency. User interfaces should be honest and transparent.</p>
+							</div>
+							<div class="value-item">
+								<span class="value-number">04</span>
+								<p><span class="emphasis">Write honestly</span> - Whether code or prose, clarity and honesty are fundamental. Complexity should be made accessible, not obscured.</p>
+							</div>
+							<div class="value-item">
+								<span class="value-number">05</span>
+								<p>Software should prioritize <span class="emphasis">performance</span>, thoughtful <span class="emphasis">UX design</span>, <span class="emphasis">security</span>, <span class="emphasis">privacy</span>, and <span class="emphasis">data-driven decision making</span> - no assumptions.</p>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section class="interests-section">
+					<div class="glass-panel">
+						<h2>Interests <span class="section-accent"></span></h2>
+						<div class="interests-grid">
+							<div class="interest-card" data-interest="software">
+								<h3>Respectful Software</h3>
+								<p>I'm passionate about creating software that is performant, secure, and reliable. Software that respects its users through clear interfaces and accessible design.</p>
+							</div>
+							<div class="interest-card" data-interest="opensource">
+								<h3>Open Source</h3>
+								<p>I believe in the power of open source software to democratize technology and foster collaborative innovation across borders and communities.</p>
+							</div>
+							<div class="interest-card" data-interest="writing">
+								<h3>Writing Well</h3>
+								<p>Clear, honest, and impactful writing is an art form I continually pursue, whether in documentation, essays, or creative work.</p>
+							</div>
+							<div class="interest-card" data-interest="development">
+								<h3>Developing Nations</h3>
+								<p>I'm focused on potential solutions for challenges facing developing countries, particularly in Pakistan and South Asia. Many developing regions share similar obstacles, and collaborative problem-solving could yield powerful results.</p>
+							</div>
+							<div class="interest-card" data-interest="southasia">
+								<h3>United South Asia</h3>
+								<p>I envision and work toward a stable, united South Asia where cooperation transcends historical divisions and creates prosperity for all.</p>
+							</div>
+							<div class="interest-card" data-interest="environment">
+								<h3>Environmental Health</h3>
+								<p>Clean air is a massive problem in South Asia. I'm interested in technological and policy solutions that address environmental challenges affecting millions of people.</p>
+							</div>
+							<div class="interest-card" data-interest="education">
+								<h3>Modern Education</h3>
+								<p>I care deeply about developing a new, modern curriculum that equips young people with the mindset and knowledge needed for effective problem-solving and lifelong learning.</p>
+							</div>
+						</div>
+					</div>
+				</section>
+			</main>
+		</div>
+	</MainLayout>
