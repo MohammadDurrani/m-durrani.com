@@ -1,0 +1,65 @@
+---
+import { getCollection } from 'astro:content';
+import MainLayout from '../../../layout/MainLayout.astro';
+
+// This is required for dynamic routes
+export async function getStaticPaths() {
+  const stories = await getCollection('writing/short-stories');
+  return stories.map(story => ({
+    params: { slug: story.slug },
+    props: { story },
+  }));
+}
+
+const { story } = Astro.props;
+const { Content } = await story.render();
+---
+
+<MainLayout pageTitle={`${story.data.title} | M Durrani`}>
+  <article class="container story-container">
+    <header class="story-header">
+      <h1>{story.data.title}</h1>
+      {story.data.description && <p class="description">{story.data.description}</p>}
+      <time datetime={story.data.publishDate.toISOString()}>
+        {story.data.publishDate.toLocaleDateString(undefined, { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        })}
+      </time>
+    </header>
+    <div class="story-content">
+      <Content />
+    </div>
+  </article>
+</MainLayout>
+
+<style>
+  .story-container {
+    max-width: 65ch;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  .story-header {
+    margin-bottom: 4rem;
+    text-align: center;
+  }
+
+  .description {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin: 1rem 0;
+    line-height: 1.6;
+  }
+
+  time {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  .story-content {
+    line-height: 1.8;
+    font-size: 1.1rem;
+  }
+</style>

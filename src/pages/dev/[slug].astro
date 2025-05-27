@@ -6,35 +6,238 @@ export async function getStaticPaths() {
   const devProjects = await getCollection('dev');
   return devProjects.map((project) => ({
     params: { slug: project.slug },
+    props: { project },
   }));
 }
 
-const { slug } = Astro.params;
-
-if (!slug) {
-  return Astro.redirect('/dev');
-}
-
-const project = await getEntry('dev', slug);
-
-if (!project) {
-  return Astro.redirect('/404');
-}
-
-const { title, description, imageUrl, tags = [] } = project.data;
+const { project } = Astro.props;
 const { Content } = await project.render();
+const { title, description, imageUrl, tags = [], publishDate } = project.data;
 ---
 
+
 <MainLayout pageTitle={title}>
-  <div class="container">
-    <h1>{title}</h1>
-    {imageUrl && <img src={imageUrl} alt={title} style="max-width:400px;"/>}
-    <p>{description}</p>
-    <div>
-      {tags.map((tag: string) => <span class="tag">{tag}</span>)}
-    </div>
-    <article class="project-body">
+  <article class="project-container">
+    <header class="project-header">
+      <div class="header-content">
+        <div class="tags-container">
+          {tags.map((tag: string) => <span class="tag">{tag}</span>)}
+        </div>
+        <h1>{title}</h1>
+        <p class="description">{description}</p>
+      </div>
+      {imageUrl && (
+        <div class="featured-image">
+          <img src={imageUrl} alt={`${title} preview`} />
+        </div>
+      )}
+    </header>
+
+    <div class="project-content">
       <Content />
-    </article>
-  </div>
+    </div>
+  </article>
 </MainLayout>
+
+<style>
+  .project-container {
+    width: min(100%, 75ch);
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  .project-header {
+    margin-bottom: 3rem;
+  }
+
+  .header-content {
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    margin: 0.5rem 0;
+    background: linear-gradient(
+      45deg,
+      hsla(0, 0%, 100%, 0.95),
+      hsla(0, 0%, 100%, 0.8)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .description {
+    font-size: 1.25rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+    margin: 1rem 0;
+    max-width: 55ch;
+  }
+
+  .tags-container {
+    margin-bottom: 1rem;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 2rem;
+    background: hsla(0, 0%, 100%, 0.05);
+    color: var(--text-highlight);
+    border: 1px solid hsla(0, 0%, 100%, 0.1);
+    display: inline-block;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    backdrop-filter: blur(10px);
+  }
+
+  .featured-image {
+    margin: 2rem -2rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    position: relative;
+  }
+
+  .featured-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(0, 0, 0, 0.2) 100%
+    );
+    pointer-events: none;
+  }
+
+  .featured-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Content Styles */
+  .project-content {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    position: relative;
+  }
+
+  .project-content :global(h2) {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 2rem 0 1rem;
+    color: var(--text-highlight);
+    position: relative;
+  }
+
+  .project-content :global(h2)::before {
+    content: '';
+    position: absolute;
+    left: -1rem;
+    top: 0.5rem;
+    width: 3px;
+    height: 1.5rem;
+    background: var(--accent);
+    border-radius: 3px;
+  }
+
+  .project-content :global(h3) {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 1.5rem 0 0.8rem;
+    color: var(--text-highlight);
+  }
+
+  .project-content :global(p) {
+    margin-bottom: 1.2rem;
+    color: var(--text-muted);
+  }
+
+  .project-content :global(pre) {
+    background: hsla(0, 0%, 5%, 0.8);
+    padding: 1.25rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    margin: 1.5rem -1rem;
+    border: 1px solid hsla(0, 0%, 100%, 0.1);
+    backdrop-filter: blur(10px);
+  }
+
+  .project-content :global(blockquote) {
+    margin: 2rem -1rem;
+    padding: 1.5rem 2rem;
+    border-left: 4px solid var(--accent);
+    background: hsla(0, 0%, 5%, 0.6);
+    border-radius: 0.5rem;
+    font-style: italic;
+    position: relative;
+  }
+
+  .project-content :global(blockquote)::before {
+    content: '"';
+    position: absolute;
+    top: -1rem;
+    left: 1rem;
+    font-size: 4rem;
+    color: hsla(0, 0%, 100%, 0.1);
+    font-family: serif;
+  }
+
+  .project-content :global(img) {
+    max-width: calc(100% + 4rem);
+    margin: 2rem -2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .project-content :global(a) {
+    color: var(--accent);
+    text-decoration: none;
+    position: relative;
+    transition: all 0.2s ease;
+  }
+
+  .project-content :global(a)::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+  }
+
+  .project-content :global(a:hover)::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .project-container {
+      padding: 1rem;
+    }
+
+    .featured-image {
+      margin: 1.5rem -1rem;
+    }
+
+    .project-content :global(img) {
+      margin: 1.5rem -1rem;
+      max-width: calc(100% + 2rem);
+    }
+
+    .project-content :global(blockquote) {
+      margin: 1.5rem -0.5rem;
+      padding: 1rem 1.5rem;
+    }
+  }
+</style>

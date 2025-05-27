@@ -1,139 +1,221 @@
 ---
-import MainLayout from "../../layout/MainLayout.astro"
-const pageTitle = "M Durrani | Writing"
+// filepath: src/pages/writing/index.astro
+import MainLayout from "../../layout/MainLayout.astro";
+import { getCollection, getEntry } from "astro:content";
+import featured from "../../content/featured.json";
+const pageTitle = "M Durrani | Writing";
+
+// Supported collections
+const validCollections = ["writing/essays", "writing/screenplays", "writing/short-stories", "writing/blog"] as const;
+type CollectionName = typeof validCollections[number];
+
+// Retrieve all content collections
+const essays = await getCollection("writing/essays");
+const screenplays = await getCollection("writing/screenplays");
+const stories = await getCollection("writing/short-stories");
+const blogPosts = await getCollection("writing/blog");
+
+// Only call getEntry if collection is valid
+let featuredEntry = null;
+let featuredImageSrc = null;
+if (validCollections.includes(featured.collection as CollectionName)) {
+  try {
+    featuredEntry = await getEntry(
+      featured.collection as CollectionName,
+      featured.slug
+    );
+
+    if (!featuredEntry) {
+      console.warn(`Featured entry not found: collection=${featured.collection}, slug=${featured.slug}`);
+    }
+
+    if (featuredEntry?.data?.imageUrl) {
+      try {
+        featuredImageSrc = (await import(/* @vite-ignore */ featuredEntry.data.imageUrl)).default;
+      } catch (imageError) {
+        console.error("Error importing featured image:", imageError);
+        featuredImageSrc = featuredEntry.data.imageUrl;
+      }
+    }
+  } catch (entryError) {
+    console.error("Error getting featured entry:", entryError);
+  }
+}
+
+// Remove featured from its section
+const essaysList = featured.collection === "writing/essays"
+  ? essays.filter((e): e is typeof essays[number] => e.slug !== featured.slug)
+  : essays;
+const screenplaysList = featured.collection === "writing/screenplays"
+  ? screenplays.filter((e): e is typeof screenplays[number] => e.slug !== featured.slug)
+  : screenplays;
+const storiesList = featured.collection === "writing/short-stories"
+  ? stories.filter((e): e is typeof stories[number] => e.slug !== featured.slug)
+  : stories;
+const blogList = featured.collection === "writing/blog"
+  ? blogPosts.filter((e): e is typeof blogPosts[number] => e.slug !== featured.slug)
+  : blogPosts;
+
+// Combine stories and screenplays for Fiction section
+const fictionList = [
+  ...storiesList.map(item => ({ ...item, type: "Short Story" })),
+  ...screenplaysList.map(item => ({ ...item, type: "Screenplay" })),
+].sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime());
+
+// Sort blog posts by date (descending)
+const sortedBlogList = blogList.sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime());
+
+// Sort essays by date (descending)
+const sortedEssaysList = essaysList.sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime());
 ---
 
 <MainLayout pageTitle={pageTitle}>
-		   <div class="container writing-page">
-        <header class="page-header">
-            <h1>Writing</h1>
-            <p class="subtitle">A collection of my written work across various formats and subjects.</p>
-        </header>
+  <div class="container writing-page">
+    <header class="page-header">
+      <h1>Writing</h1>
+      <p class="subtitle">A collection of my written work across various formats and subjects.</p>
+    </header>
 
-        <!-- Featured Writing Section -->
-        <section class="featured-section">
-            <div class="featured-content">
-                <div class="featured-text">
-                    <span class="tag">Featured</span>
-                    <h2>The Future of Ethical Technology in South Asia</h2>
-                    <p>An exploration of how ethical technology practices can address unique challenges in the developing world, with a focus on accessibility, privacy, and sustainable innovation.</p>
-                    <a href="/writing/essays/ethical-tech-south-asia" class="read-more">Read essay →</a>
-                </div>
-                <div class="featured-image">
-                    <div class="image-container">
-                        <!-- Replace with your actual featured image -->
-                        <img src="/images/featured-writing.jpg" alt="Featured essay illustration" />
-                    </div>
-                </div>
+    <!-- Featured Writing Section -->
+    <section class="featured-section">
+      <div class="featured-content">
+        <div class="featured-text">
+          <span class="tag">Featured</span>
+          {featuredEntry ? (
+            <>
+              <h2>{featuredEntry.data.title}</h2>
+              <p>{
+                "description" in featuredEntry.data
+                  ? featuredEntry.data.description
+                  : ("logline" in featuredEntry.data
+                      ? featuredEntry.data.logline
+                      : "")
+              }</p>
+              <a href={
+                (() => {
+                  switch (featured.collection) {
+                    case "writing/essays":
+                      return `/writing/essays/${featuredEntry.slug}`;
+                    case "writing/screenplays":
+                    case "writing/short-stories":
+                      return `/writing/fiction/${featuredEntry.slug}`;
+                    case "writing/blog":
+                      return `/writing/blog/${featuredEntry.slug}`;
+                    default:
+                      return "#";
+                  }
+                })()
+              } class="read-more">
+                Read {(() => {
+                  switch (featured.collection) {
+                    case "writing/essays":
+                      return "essay";
+                    case "writing/screenplays":
+                      return "screenplay";
+                    case "writing/short-stories":
+                      return "story";
+                    case "writing/blog":
+                      return "post";
+                    default:
+                      return "";
+                  }
+                })()} →
+              </a>
+            </>
+          ) : (
+            <div style="color: red;">
+              <strong>
+                Featured entry not found. Please check your <code>featured.json</code> collection and slug.
+              </strong>
             </div>
-        </section>
-
-        
-
-        <!-- Recent Blog Posts -->
-        <section class="writing-section blog-section">
-            <div class="section-header">
-                <h2>Recent Blog Posts</h2>
-                <a href="/writing/blog" class="view-all">View all posts →</a>
-            </div>
-            
-            <div class="entries-grid blog-entries">
-                <a href="/writing/blog/post-1" class="entry">
-                    <span class="entry-date">May 15, 2025</span>
-                    <h3>Designing for Invisible Accessibility</h3>
-                    <p>How subtle design choices can dramatically improve accessibility without compromising aesthetics.</p>
-                </a>
-                
-                <a href="/writing/blog/post-2" class="entry">
-                    <span class="entry-date">April 30, 2025</span>
-                    <h3>The Return to Minimalism in Digital Spaces</h3>
-                    <p>Examining the growing trend away from information overload toward focused, intentional digital experiences.</p>
-                </a>
-                
-                <a href="/writing/blog/post-3" class="entry">
-                    <span class="entry-date">April 12, 2025</span>
-                    <h3>Performance as an Ethical Consideration</h3>
-                    <p>Why optimizing for performance isn't just technical—it's an ethical imperative for inclusive development.</p>
-                </a>
-            </div>
-        </section>
-        <!-- Essays and Stories Grid -->
-        <div class="two-column-grid">
-            <!-- Essays Section -->
-            <section class="writing-section">
-                <div class="section-header">
-                    <h2>Essays</h2>
-                    <a href="/writing/essays" class="view-all">View all essays →</a>
-                </div>
-                
-                <div class="entries-list">
-                    <a href="/writing/essays/essay-1" class="entry">
-                        <span class="entry-date">March 2025</span>
-                        <h3>The Digital Divide in Education</h3>
-                    </a>
-                    
-                    <a href="/writing/essays/essay-2" class="entry">
-                        <span class="entry-date">February 2025</span>
-                        <h3>Writing as a Technical Skill</h3>
-                    </a>
-                    
-                    <a href="/writing/essays/essay-3" class="entry">
-                        <span class="entry-date">January 2025</span>
-                        <h3>Open Source and Knowledge Sharing</h3>
-                    </a>
-                </div>
-            </section>
-
-            <!-- Stories & Screenplays Section -->
-            <section class="writing-section">
-                <div class="section-header">
-                    <h2>Fiction</h2>
-                    <a href="/writing/fiction" class="view-all">View all fiction →</a>
-                </div>
-                
-                <div class="entries-list">
-                    <a href="/writing/fiction/story-1" class="entry">
-                        <span class="entry-date">Short Story • April 2025</span>
-                        <h3>The Last Engineer</h3>
-                    </a>
-                    
-                    <a href="/writing/fiction/screenplay-1" class="entry">
-                        <span class="entry-date">Screenplay • March 2025</span>
-                        <h3>Monsoon Protocol</h3>
-                    </a>
-                    
-                    <a href="/writing/fiction/story-2" class="entry">
-                        <span class="entry-date">Short Story • January 2025</span>
-                        <h3>The Memory Merchants</h3>
-                    </a>
-                </div>
-            </section>
+          )}
         </div>
-        <!-- Magazine Section -->
-        <section class="magazine-section">
-            <div class="magazine-content">
-                <div class="magazine-info">
-                    <span class="tag accent">Editor in Chief</span>
-                    <h2>Proudly Pakistani</h2>
-                    <p>A monthly publication, Proudly Pakistani is a bold, unfiltered celebration of Pakistan’s kaleidoscopic identity. Dive into untold stories of artists, rebels, and everyday heroes redefining tradition and modernity. From Lahore’s neon-lit streets to Hunza’s silent peaks, we amplify voices often unheard—featuring raw art, fiery activism, forgotten histories, and recipes that taste like home. This isn’t nostalgia; it’s a revolution in ink. Click to explore why “Pakistaniyat” is more than a label—it’s a heartbeat. </p>
-                    <div class="magazine-links">
-                        <a href="/writing/magazine" class="magazine-link">About the publication →</a>
-                        <a href="https://proudlypakistani.com" class="magazine-link">Visit magazine →</a>
-                    </div>
-                </div>
-                <div class="magazine-issues">
-                    <div class="issue">
-                        <div class="issue-cover">
-                            <!-- Replace with actual magazine cover -->
-                            <img src="/images/magazine-latest.jpg" alt="Latest magazine issue cover" />
-                        </div>
-                        <div class="issue-info">
-                            <span>Latest Issue</span>
-                            <p>July 2025: "Coming Soon"</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <div class="featured-image">
+          <div class="image-container">
+            {featuredImageSrc && (
+              <img src={featuredImageSrc} alt="Featured illustration" />
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent Blog Posts -->
+    <section class="writing-section blog-section">
+      <div class="section-header">
+        <h2>Recent Blog Posts</h2>
+        <a href="/writing/blog" class="view-all">View all posts →</a>
+      </div>
+      <div class="entries-grid blog-entries">
+        {sortedBlogList.slice(0, 3).map(post => (
+          <a href={`/writing/blog/${post.slug}`} class="entry">
+            <span class="entry-date">{post.data.publishDate.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+            <h3>{post.data.title}</h3>
+            <p>{post.data.description}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- Essays and Stories Grid -->
+    <div class="two-column-grid">
+      <!-- Essays Section -->
+      <section class="writing-section">
+        <div class="section-header">
+          <h2>Essays</h2>
+          <a href="/writing/essays" class="view-all">View all essays →</a>
+        </div>
+        <div class="entries-list">
+          {sortedEssaysList.slice(0, 3).map(essay => (
+            <a href={`/writing/essays/${essay.slug}`} class="entry">
+              <span class="entry-date">{essay.data.publishDate.toLocaleDateString(undefined, { year: 'numeric', month: 'long' })}</span>
+              <h3>{essay.data.title}</h3>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <!-- Stories & Screenplays Section -->
+      <section class="writing-section">
+        <div class="section-header">
+          <h2>Fiction</h2>
+          <a href="/writing/fiction" class="view-all">View all fiction →</a>
+        </div>
+        <div class="entries-list">
+          {fictionList.slice(0, 3).map(item => (
+            <a href={`/writing/fiction/${item.slug}`} class="entry">
+              <span class="entry-date">{item.type} • {item.data.publishDate.toLocaleDateString(undefined, { year: 'numeric', month: 'long' })}</span>
+              <h3>{item.data.title}</h3>
+            </a>
+          ))}
+        </div>
+      </section>
     </div>
+    <!-- Magazine Section -->
+    <section class="magazine-section">
+      <div class="magazine-content">
+        <div class="magazine-info">
+          <span class="tag accent">Editor in Chief</span>
+          <h2>Proudly Pakistani</h2>
+          <p>A monthly publication, Proudly Pakistani is a bold, unfiltered celebration of Pakistan’s kaleidoscopic identity. Dive into untold stories of artists, rebels, and everyday heroes redefining tradition and modernity. From Lahore’s neon-lit streets to Hunza’s silent peaks, we amplify voices often unheard—featuring raw art, fiery activism, forgotten histories, and recipes that taste like home. This isn’t nostalgia; it’s a revolution in ink. Click to explore why “Pakistaniyat” is more than a label—it’s a heartbeat. </p>
+          <div class="magazine-links">
+            <a href="/writing/magazine" class="magazine-link">About the publication →</a>
+            <a href="https://proudlypakistani.com" class="magazine-link">Visit magazine →</a>
+          </div>
+        </div>
+        <div class="magazine-issues">
+          <div class="issue">
+            <div class="issue-cover">
+              <!-- Replace with actual magazine cover -->
+              <img src="/images/magazine-latest.jpg" alt="Latest magazine issue cover" />
+            </div>
+            <div class="issue-info">
+              <span>Latest Issue</span>
+              <p>July 2025: "Coming Soon"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </MainLayout>

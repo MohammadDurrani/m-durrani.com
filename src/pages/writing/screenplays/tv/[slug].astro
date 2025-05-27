@@ -1,0 +1,80 @@
+---
+import { getCollection } from 'astro:content';
+import MainLayout from '../../../../layout/MainLayout.astro';
+
+export async function getStaticPaths() {
+  const screenplays = await getCollection('writing/screenplays', 
+    (screenplay) => screenplay.id.startsWith('tv/')  // This filters by folder
+  );
+  return screenplays.map(screenplay => ({
+    params: { slug: screenplay.slug },
+    props: { screenplay },
+  }));
+}
+
+const { screenplay } = Astro.props;
+---
+
+<MainLayout pageTitle={`${screenplay.data.title} | M Durrani`}>
+  <article class="container screenplay-container">
+    <header class="screenplay-header">
+      <h1>{screenplay.data.title}</h1>
+      {screenplay.data.logline && <p class="logline">{screenplay.data.logline}</p>}
+      <time datetime={screenplay.data.publishDate.toISOString()}>
+        {screenplay.data.publishDate.toLocaleDateString(undefined, { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        })}
+      </time>
+      <div class="screenplay-actions">
+        <a href={screenplay.data.pdfUrl} class="pdf-button" target="_blank" rel="noopener noreferrer">
+          Read TV Screenplay →
+        </a>
+      </div>
+    </header>
+  </article>
+</MainLayout>
+
+<style>
+ .screenplay-container {
+    max-width: 65ch;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  .screenplay-header {
+    margin-bottom: 4rem;
+    text-align: center;
+  }
+
+  .logline {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin: 1rem 0;
+    line-height: 1.6;
+  }
+
+  time {
+    display: block;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+  }
+
+  .pdf-button {
+    display: inline-block;
+    background: hsla(0, 0%, 100%, 0.1);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+
+  .pdf-button:hover {
+    background: hsla(0, 0%, 100%, 0.15);
+    transform: translateY(-2px);
+  }
+</style>

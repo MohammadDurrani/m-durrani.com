@@ -1,0 +1,89 @@
+---
+import MainLayout from "../layout/MainLayout.astro";
+const pageTitle = "404 Error | M Durrani";
+---
+
+<MainLayout pageTitle={pageTitle}>
+  <div class="container">
+    <div class="glass-panel error-panel">
+      <h1 class="animated-title">404</h1>
+      <div class="title-underline"></div>
+      <p class="intro-text">Page Not Found</p>
+      <p class="description">The page you're looking for doesn't exist or has been moved to a different location.</p>
+      <div class="error-actions">
+        <a href="/" class="nav-link">
+          <span class="nav-text">Return Home</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</MainLayout>
+
+<style>
+  .error-panel {
+    text-align: center;
+    max-width: 40rem;
+    margin: 4rem auto;
+    padding: 3rem 2rem;
+  }
+
+  h1 {
+    font-size: clamp(4rem, 15vw, 8rem);
+    margin-bottom: 0.5rem;
+    background: linear-gradient(
+      45deg,
+      hsla(0, 0%, 100%, 0.95),
+      hsla(0, 0%, 100%, 0.8)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .intro-text {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-highlight);
+    margin-bottom: 1rem;
+  }
+
+  .description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    color: var(--text-muted);
+  }
+
+  .error-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .error-actions .nav-link {
+    background: hsla(0, 0%, 100%, 0.05);
+    border: 1px solid hsla(0, 0%, 100%, 0.1);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    backdrop-filter: blur(10px);
+  }
+
+  .error-actions .nav-link:hover {
+    border-color: hsla(0, 0%, 100%, 0.2);
+    background: hsla(0, 0%, 100%, 0.1);
+  }
+
+.title-underline {
+margin: 0.5rem auto 2rem;
+  }
+  @media (max-width: 768px) {
+    .error-panel {
+      margin: 2rem auto;
+      padding: 2rem 1.5rem;
+    }
+
+    .description {
+      font-size: 1rem;
+    }
+  }
+</style>

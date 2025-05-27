@@ -1,0 +1,64 @@
+---
+import { getCollection } from 'astro:content';
+import MainLayout from '../../../layout/MainLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('writing/blog');
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<MainLayout pageTitle={`${post.data.title} | M Durrani`}>
+  <article class="container blog-container">
+    <header class="blog-header">
+      <h1>{post.data.title}</h1>
+      {post.data.description && <p class="description">{post.data.description}</p>}
+      <time datetime={post.data.publishDate.toISOString()}>
+        {post.data.publishDate.toLocaleDateString(undefined, { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        })}
+      </time>
+    </header>
+    <div class="blog-content">
+      <Content />
+    </div>
+  </article>
+</MainLayout>
+
+<style>
+  .blog-container {
+    max-width: 65ch;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  .blog-header {
+    margin-bottom: 4rem;
+    text-align: center;
+  }
+
+  .description {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin: 1rem 0;
+    line-height: 1.6;
+  }
+
+  time {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  .blog-content {
+    line-height: 1.8;
+    font-size: 1.1rem;
+  }
+</style>

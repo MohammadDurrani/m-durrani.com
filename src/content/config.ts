@@ -23,6 +23,7 @@ const essaysCollection = defineCollection({
     title: z.string(),
     description: z.string().optional(), // A short summary/subtitle
     publishDate: z.date(),
+    imageUrl: z.string().optional(),  
   }),
 });
 
@@ -32,9 +33,9 @@ const screenplaysCollection = defineCollection({
   schema: z.object({
     title: z.string(),
     logline: z.string(),
-    //PDF link to the screenplay
     pdfUrl: z.string().url(), 
     publishDate: z.date(),
+    imageUrl: z.string().optional(),  
   }),
 });
 
@@ -45,6 +46,7 @@ const storiesCollection = defineCollection({
     title: z.string(),
     description: z.string().optional(),
     publishDate: z.date(),
+    imageUrl: z.string().optional(),  
   }),
 });
 
@@ -55,6 +57,7 @@ const blogCollection = defineCollection({
     title: z.string(),
     publishDate: z.date(),
     description: z.string().optional(),
+    imageUrl: z.string().optional(),  
   }),
 });
 
@@ -62,8 +65,8 @@ const blogCollection = defineCollection({
 // Export all collections
 export const collections = {
   'dev': devCollection,
-  'essays': essaysCollection,
-  'screenplays': screenplaysCollection,
-  'short-stories': storiesCollection, // <<< MUST BE EXACTLY THIS KEY
-  'blog': blogCollection, // Include if you create this collection
+  'writing/essays': essaysCollection,
+  'writing/screenplays': screenplaysCollection,
+  'writing/short-stories': storiesCollection,
+  'writing/blog': blogCollection,
 };
