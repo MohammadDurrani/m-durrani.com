@@ -19,7 +19,7 @@ const sortedPosts = posts.sort((a, b) =>
 
     <div class="blog-list">
       {sortedPosts.map(post => (
-        <article class="blog-entry">
+        <a href={`/writing/blog/${post.slug}`}><article class="blog-entry">
           <time datetime={post.data.publishDate.toISOString()}>
             {post.data.publishDate.toLocaleDateString(undefined, {
               year: 'numeric',
@@ -28,11 +28,11 @@ const sortedPosts = posts.sort((a, b) =>
           </time>
           <div class="entry-content">
             <h2>
-              <a href={`/writing/blog/${post.slug}`}>{post.data.title}</a>
+              {post.data.title}
             </h2>
             <p class="description">{post.data.description}</p>
           </div>
-        </article>
+        </article></a>
       ))}
     </div>
   </div>
@@ -52,6 +52,13 @@ const sortedPosts = posts.sort((a, b) =>
   .blog-entry:first-child {
     border-top: 1px solid hsla(0, 0%, 100%, 0.1);
   }
+
+  .blog-entry::hover{
+    background: hsla(0, 0%, 100%, 0.05);
+    transform: scale(1.25)
+    transition: background 0.2s ease;
+  }
+  
 
   time {
     font-size: 0.9rem;
