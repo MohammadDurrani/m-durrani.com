@@ -6,14 +6,15 @@ import featured from "../../content/featured.json";
 const pageTitle = "M Durrani | Writing";
 
 // Supported collections
-const validCollections = ["writing/essays", "writing/screenplays", "writing/short-stories", "writing/blog"] as const;
+const validCollections = ["essays", "tv-screenplays", "film-screenplays", "short-stories", "blog"] as const;
 type CollectionName = typeof validCollections[number];
 
 // Retrieve all content collections
-const essays = await getCollection("writing/essays");
-const screenplays = await getCollection("writing/screenplays");
-const stories = await getCollection("writing/short-stories");
-const blogPosts = await getCollection("writing/blog");
+const essays = await getCollection("essays");
+const tvScreenplays = await getCollection("tv-screenplays");
+const filmScreenplays = await getCollection("film-screenplays");
+const stories = await getCollection("short-stories");
+const blogPosts = await getCollection("blog");
 
 // Only call getEntry if collection is valid
 let featuredEntry = null;
@@ -43,23 +44,27 @@ if (validCollections.includes(featured.collection as CollectionName)) {
 }
 
 // Remove featured from its section
-const essaysList = featured.collection === "writing/essays"
+const essaysList = featured.collection === "essays"
   ? essays.filter((e): e is typeof essays[number] => e.slug !== featured.slug)
   : essays;
-const screenplaysList = featured.collection === "writing/screenplays"
-  ? screenplays.filter((e): e is typeof screenplays[number] => e.slug !== featured.slug)
-  : screenplays;
-const storiesList = featured.collection === "writing/short-stories"
+const tvScreenplaysList = featured.collection === "tv-screenplays"
+  ? tvScreenplays.filter((e): e is typeof tvScreenplays[number] => e.slug !== featured.slug)
+  : tvScreenplays;
+const filmScreenplaysList = featured.collection === "film-screenplays"
+  ? filmScreenplays.filter((e): e is typeof filmScreenplays[number] => e.slug !== featured.slug)
+  : filmScreenplays;
+const storiesList = featured.collection === "short-stories"
   ? stories.filter((e): e is typeof stories[number] => e.slug !== featured.slug)
   : stories;
-const blogList = featured.collection === "writing/blog"
+const blogList = featured.collection === "blog"
   ? blogPosts.filter((e): e is typeof blogPosts[number] => e.slug !== featured.slug)
   : blogPosts;
 
 // Combine stories and screenplays for Fiction section
 const fictionList = [
-  ...storiesList.map(item => ({ ...item, type: "Short Story" })),
-  ...screenplaysList.map(item => ({ ...item, type: "Screenplay" })),
+  ...storiesList.map(item => ({ ...item, type: "Short Story", category: "short-stories" })),
+  ...tvScreenplaysList.map(item => ({ ...item, type: "TV Screenplay", category: "tv-screenplays" })),
+  ...filmScreenplaysList.map(item => ({ ...item, type: "Film Screenplay", category: "film-screenplays" })),
 ].sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime());
 
 // Sort blog posts by date (descending)
@@ -94,12 +99,15 @@ const sortedEssaysList = essaysList.sort((a, b) => b.data.publishDate.getTime() 
               <a href={
                 (() => {
                   switch (featured.collection) {
-                    case "writing/essays":
+                    case "essays":
                       return `/writing/essays/${featuredEntry.slug}`;
-                    case "writing/screenplays":
-                    case "writing/short-stories":
-                      return `/writing/fiction/${featuredEntry.slug}`;
-                    case "writing/blog":
+                    case "tv-screenplays":
+                      return `/writing/screenplays/tv/${featuredEntry.slug}`;
+                    case "film-screenplays":
+                      return `/writing/screenplays/film/${featuredEntry.slug}`;
+                    case "short-stories":
+                      return `/writing/short-stories/${featuredEntry.slug}`;
+                    case "blog":
                       return `/writing/blog/${featuredEntry.slug}`;
                     default:
                       return "#";
@@ -108,13 +116,14 @@ const sortedEssaysList = essaysList.sort((a, b) => b.data.publishDate.getTime() 
               } class="read-more">
                 Read {(() => {
                   switch (featured.collection) {
-                    case "writing/essays":
+                    case "essays":
                       return "essay";
-                    case "writing/screenplays":
+                    case "tv-screenplays":
+                    case "film-screenplays":
                       return "screenplay";
-                    case "writing/short-stories":
+                    case "short-stories":
                       return "story";
-                    case "writing/blog":
+                    case "blog":
                       return "post";
                     default:
                       return "";
@@ -183,29 +192,29 @@ const sortedEssaysList = essaysList.sort((a, b) => b.data.publishDate.getTime() 
         </div>
         <div class="entries-list">
           {fictionList.slice(0, 3).map(item => (
-            <a href={`/writing/fiction/${item.slug}`} class="entry">
-              <span class="entry-date">{item.type} • {item.data.publishDate.toLocaleDateString(undefined, { year: 'numeric', month: 'long' })}</span>
-              <h3>{item.data.title}</h3>
+          <a href={item.category === 'tv-screenplays' ? `/writing/screenplays/tv/${item.slug}` : item.category === 'film-screenplays' ? `/writing/screenplays/film/${item.slug}` : `/writing/${item.category}/${item.slug}`} class="entry">
+            <span class="entry-date">{item.type} • {item.data.publishDate.toLocaleDateString(undefined, { year: 'numeric', month: 'long' })}</span>
+            <h3>{item.data.title}</h3>
             </a>
-          ))}
+            ))}
         </div>
       </section>
     </div>
+    
     <!-- Magazine Section -->
     <section class="magazine-section">
       <div class="magazine-content">
         <div class="magazine-info">
           <span class="tag accent">Editor in Chief</span>
           <h2>Proudly Pakistani</h2>
-          <p>A monthly publication, Proudly Pakistani is a bold, unfiltered celebration of Pakistan’s kaleidoscopic identity. Dive into untold stories of artists, rebels, and everyday heroes redefining tradition and modernity. From Lahore’s neon-lit streets to Hunza’s silent peaks, we amplify voices often unheard—featuring raw art, fiery activism, forgotten histories, and recipes that taste like home. This isn’t nostalgia; it’s a revolution in ink. Click to explore why “Pakistaniyat” is more than a label—it’s a heartbeat. </p>
+          <p>A monthly publication, Proudly Pakistani is a bold, unfiltered celebration of Pakistan's kaleidoscopic identity. Dive into untold stories of artists, rebels, and everyday heroes redefining tradition and modernity. From Lahore's neon-lit streets to Hunza's silent peaks, we amplify voices often unheard—featuring raw art, fiery activism, forgotten histories, and recipes that taste like home. This isn't nostalgia; it's a revolution in ink. Click to explore why "Pakistaniyat" is more than a label—it's a heartbeat. </p>
           <div class="magazine-links">
-			<a href="https://proudlypakistani.com" class="magazine-link">Visit magazine →</a>
+            <a href="https://proudlypakistani.com" class="magazine-link">Visit magazine →</a>
           </div>
         </div>
         <div class="magazine-issues">
           <div class="issue">
             <div class="issue-cover">
-              <!-- Replace with actual magazine cover -->
               <img src="/images/magazine-latest.jpg" alt="Latest magazine issue cover" />
             </div>
             <div class="issue-info">

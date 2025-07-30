@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import MainLayout from '../../../layout/MainLayout.astro';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('writing/blog');
+  const posts = await getCollection('blog');
   return posts.map(post => ({
     params: { slug: post.slug },
     props: { post },

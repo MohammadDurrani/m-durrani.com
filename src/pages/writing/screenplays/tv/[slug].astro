@@ -3,9 +3,7 @@ import { getCollection } from 'astro:content';
 import MainLayout from '../../../../layout/MainLayout.astro';
 
 export async function getStaticPaths() {
-  const screenplays = await getCollection('writing/screenplays', 
-    (screenplay) => screenplay.id.startsWith('tv/')  // This filters by folder
-  );
+  const screenplays = await getCollection('tv-screenplays');
   return screenplays.map(screenplay => ({
     params: { slug: screenplay.slug },
     props: { screenplay },

@@ -4,17 +4,17 @@ import { getCollection } from "astro:content";
 const pageTitle = "M Durrani | Fiction";
 
 // Get all screenplays and stories
-const screenplays = await getCollection("writing/screenplays");
-const stories = await getCollection("writing/short-stories");
+const tvScreenplays = await getCollection("tv-screenplays");
+const filmScreenplays = await getCollection("film-screenplays");
+const stories = await getCollection("short-stories");
 
-// Separate TV and Film screenplays
-const tvScreenplays = screenplays
-  .filter(screenplay => screenplay.id.startsWith('tv/'))
-  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime());
+const sortedTvScreenplays = tvScreenplays.sort((a, b) => 
+  b.data.publishDate.getTime() - a.data.publishDate.getTime()
+);
 
-const filmScreenplays = screenplays
-  .filter(screenplay => screenplay.id.startsWith('film/'))
-  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime());
+const sortedFilmScreenplays = filmScreenplays.sort((a, b) => 
+  b.data.publishDate.getTime() - a.data.publishDate.getTime()
+);
 
 const sortedStories = stories.sort((a, b) => 
   b.data.publishDate.getTime() - a.data.publishDate.getTime()
@@ -36,7 +36,7 @@ const sortedStories = stories.sort((a, b) =>
           <div class="section-accent"></div>
         </div>
         <div class="entries-grid">
-          {tvScreenplays.map(screenplay => (
+          {sortedTvScreenplays.map(screenplay => (
             <article class="fiction-entry">
               <div class="entry-content">
                 <span class="entry-type">TV Series</span>
@@ -66,7 +66,7 @@ const sortedStories = stories.sort((a, b) =>
           <div class="section-accent"></div>
         </div>
         <div class="entries-grid">
-          {filmScreenplays.map(screenplay => (
+          {sortedFilmScreenplays.map(screenplay => (
             <article class="fiction-entry">
               <div class="entry-content">
                 <span class="entry-type">Feature Film</span>
@@ -200,7 +200,7 @@ const sortedStories = stories.sort((a, b) =>
     color: hsla(0, 0%, 100%, 0.5);
   }
 
-  .read-script,
+  .read-more,
   .read-story {
     color: white;
     text-decoration: none;
@@ -208,7 +208,7 @@ const sortedStories = stories.sort((a, b) =>
     transition: all 0.2s ease;
   }
 
-  .read-script:hover,
+  .read-more:hover,
   .read-story:hover {
     text-shadow: 0 0 8px hsla(0, 0%, 100%, 0.5);
   }
@@ -221,18 +221,5 @@ const sortedStories = stories.sort((a, b) =>
     .entry-content {
       padding: 1.5rem;
     }
-  }
-
-  .read-more,
-  .read-story {
-    color: white;
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.2s ease;
-  }
-
-  .read-more:hover,
-  .read-story:hover {
-    text-shadow: 0 0 8px hsla(0, 0%, 100%, 0.5);
   }
 </style>

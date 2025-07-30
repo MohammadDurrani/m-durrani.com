@@ -3,16 +3,15 @@ import { defineCollection, z } from 'astro:content';
 
 // Schema for Dev Projects
 const devCollection = defineCollection({
-  type: 'content', // Use 'content' for Markdown/MDX files
+  type: 'content',
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    imageUrl: z.string().optional(),      // Path to a cover image
-    liveUrl: z.string().url().optional(), // URL to live demo
-    repoUrl: z.string().url().optional(), // URL to GitHub/GitLab repo
+    imageUrl: z.string().optional(),
+    liveUrl: z.string().url().optional(),
+    repoUrl: z.string().url().optional(),
     tags: z.array(z.string()).optional(),
     publishDate: z.date(),
-    // You don't need an 'author' field since it's always you!
   }),
 });
 
@@ -21,21 +20,33 @@ const essaysCollection = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
-    description: z.string().optional(), // A short summary/subtitle
+    description: z.string().optional(),
     publishDate: z.date(),
-    imageUrl: z.string().optional(),  
+    imageUrl: z.string().optional(),
   }),
 });
 
-// Schema for Screenplays
-const screenplaysCollection = defineCollection({
+// Schema for TV Screenplays
+const tvScreenplaysCollection = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
     logline: z.string(),
-    pdfUrl: z.string().url(), 
+    pdfUrl: z.string().url(),
     publishDate: z.date(),
-    imageUrl: z.string().optional(),  
+    imageUrl: z.string().optional(),
+  }),
+});
+
+// Schema for Film Screenplays
+const filmScreenplaysCollection = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    logline: z.string(),
+    pdfUrl: z.string().url(),
+    publishDate: z.date(),
+    imageUrl: z.string().optional(),
   }),
 });
 
@@ -46,27 +57,27 @@ const storiesCollection = defineCollection({
     title: z.string(),
     description: z.string().optional(),
     publishDate: z.date(),
-    imageUrl: z.string().optional(),  
+    imageUrl: z.string().optional(),
   }),
 });
 
-// Schema for Blog Posts (Optional)
+// Schema for Blog Posts
 const blogCollection = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
     publishDate: z.date(),
     description: z.string().optional(),
-    imageUrl: z.string().optional(),  
+    imageUrl: z.string().optional(),
   }),
 });
 
-
-// Export all collections
+// Export all collections with flat structure
 export const collections = {
   'dev': devCollection,
-  'writing/essays': essaysCollection,
-  'writing/screenplays': screenplaysCollection,
-  'writing/short-stories': storiesCollection,
-  'writing/blog': blogCollection,
+  'essays': essaysCollection,
+  'tv-screenplays': tvScreenplaysCollection,
+  'film-screenplays': filmScreenplaysCollection,
+  'short-stories': storiesCollection,
+  'blog': blogCollection,
 };

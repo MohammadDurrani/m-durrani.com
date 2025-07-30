@@ -798,7 +798,6 @@ opacity: 1; /* Always visible */
     margin-top: 0.5rem;
 }
 .writing-page .magazine-section {
-    margin-bottom: 6rem;
     background-color: hsla(0, 0%, 8%, 0.8);
     border-radius: 0.75rem;
     overflow: hidden;
@@ -1334,9 +1333,6 @@ opacity: 1; /* Always visible */
             }
         }
 
-        section.interests-section {
-    margin-bottom: 6em;
-}
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 0.25s;

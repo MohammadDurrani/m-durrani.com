@@ -2,9 +2,8 @@
 import { getCollection } from 'astro:content';
 import MainLayout from '../../../layout/MainLayout.astro';
 
-// This is required for dynamic routes
 export async function getStaticPaths() {
-  const stories = await getCollection('writing/short-stories');
+  const stories = await getCollection('short-stories');
   return stories.map(story => ({
     params: { slug: story.slug },
     props: { story },
