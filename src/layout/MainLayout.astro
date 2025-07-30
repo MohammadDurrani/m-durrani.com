@@ -1,6 +1,7 @@
 ---
 import Header from "../components/Header.astro"
 import Footer from "../components/Footer.astro"
+import LoadingBar from "../components/LoadingBar.astro"
 import "../styles/global.css";
 import { ClientRouter } from "astro:transitions";
 const {pageTitle} = Astro.props;
@@ -17,15 +18,81 @@ const {pageTitle} = Astro.props;
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+		<script src="/instant-nav.js"></script>
 		<title>{pageTitle}</title>
         <ClientRouter />
-
+        
+        <!-- Add critical CSS inline for faster loading -->
+        <style>
+        	/* Critical CSS - minimal styles for immediate render */
+        	body { 
+        		background-color: hsl(0, 0%, 6%); 
+        		color: white; 
+        		font-family: 'Nunito', sans-serif;
+        		margin: 0;
+        	}
+        	.container { 
+        		max-width: 82rem; 
+        		margin: 0 auto; 
+        		padding: 2rem 1rem; 
+        	}
+        </style>
 	</head>
 	<body>
+		<LoadingBar />
 		<div class="radial-background" id="radial"></div>
 		<div class="noise"></div>
 		<Header/>
         <slot/>
 		<Footer/>
+        
+        <!-- Optimize transitions -->
+        <script is:inline>
+          (function() {
+            const prefetchedUrls = new Set();
+            
+            function preloadPage(url) {
+              if (prefetchedUrls.has(url)) return;
+              prefetchedUrls.add(url);
+              
+              const link = document.createElement('link');
+              link.rel = 'prefetch';
+              link.href = url;
+              document.head.appendChild(link);
+            }
+            
+            // Preload critical pages
+            const criticalPages = ['/', '/dev', '/writing'];
+            criticalPages.forEach(function(page) {
+              if (window.location.pathname !== page) {
+                preloadPage(page);
+              }
+            });
+            
+            // Preload on hover
+            document.addEventListener('mouseover', function(e) {
+              const link = e.target.closest('a[href]');
+              if (link && link.href) {
+                try {
+                  const url = new URL(link.href, window.location.origin);
+                  if (url.origin === window.location.origin) {
+                    preloadPage(url.pathname);
+                  }
+                } catch (error) {
+                  // Invalid URL, ignore
+                }
+              }
+            });
+            
+            // Optimize animations during transitions
+            document.addEventListener('astro:before-preparation', function() {
+              document.body.classList.add('transitioning');
+            });
+            
+            document.addEventListener('astro:after-swap', function() {
+              document.body.classList.remove('transitioning');
+            });
+          })();
+        </script>
   </body>
 </html>

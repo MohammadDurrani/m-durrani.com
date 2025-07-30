@@ -1337,3 +1337,126 @@ opacity: 1; /* Always visible */
 ::view-transition-new(root) {
   animation-duration: 0.25s;
 }
+
+/* Add these optimizations to your global.css */
+
+/* Optimize view transitions */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.2s; /* Reduced from 0.25s */
+  animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Optimize heavy animations during transitions */
+.transitioning * {
+  animation-duration: 0.1s !important;
+  transition-duration: 0.1s !important;
+}
+
+/* GPU acceleration for better performance */
+.glass-panel,
+.navbar,
+.project-card,
+.interest-card {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Reduce backdrop-filter complexity during transitions */
+@media (prefers-reduced-motion: no-preference) {
+  .transitioning .glass-panel,
+  .transitioning .navbar {
+    backdrop-filter: blur(5px); /* Reduced complexity */
+  }
+}
+
+/* Optimize animations for performance */
+@keyframes shimmer {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes slide {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(70%); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1) translateZ(0); opacity: 1; }
+  50% { transform: scale(1.5) translateZ(0); opacity: 1; }
+}
+
+/* Optimize noise background */
+.noise {
+  opacity: 0.5; /* Reduced from 0.75 */
+  filter: contrast(110%) brightness(280%); /* Reduced complexity */
+}
+
+/* Faster hover transitions */
+.nav-link,
+.project-card,
+.interest-card,
+.entry {
+  transition-duration: 0.15s; /* Faster hover response */
+}
+
+/* Reduce reflow/repaint */
+
+/* Reduce reflow/repaint */
+.container,
+.glass-panel,
+.project-card {
+  contain: layout style;
+}
+
+/* Loading states */
+.page-loading {
+  pointer-events: none;
+}
+
+.page-loading * {
+  cursor: wait !important;
+}
+
+/* Instant feedback for links */
+a[href]:active {
+  transform: scale(0.98);
+  transition: transform 0.05s ease;
+}
+
+/* Skeleton loading for images */
+img {
+  background: linear-gradient(90deg, 
+    hsla(0, 0%, 20%, 0.3) 25%, 
+    hsla(0, 0%, 25%, 0.3) 50%, 
+    hsla(0, 0%, 20%, 0.3) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+img[src]:not([src=""]) {
+  animation: none;
+  background: none;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Progressive enhancement */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .loading-progress::after {
+    animation: none;
+  }
+}
