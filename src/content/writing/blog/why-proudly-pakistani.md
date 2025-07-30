@@ -1,5 +1,5 @@
 ---
-title: "Why Proudly Pakistani"
+title: "Why I made Proudly Pakistani"
 publishDate: 2025-05-31
-description: "Some of my favorite tracks right now."
+description: ""
 ---

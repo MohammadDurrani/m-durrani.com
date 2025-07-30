@@ -7,6 +7,8 @@ tags: ["WordPress", "PHP", "JavaScript", "Tailwind CSS"]
 publishDate: 2024-05-01
 ---
 
+This is a technical breakdown of Proudly Pakistani. If you're interested in my motivations behind the project, please refer to this article. 
+
 ## About the Project
 
 Proudly Pakistani is a platform that celebrates the achievements and positive stories from Pakistan. The goal is to highlight the people, businesses, and organizations making a difference in their communities.

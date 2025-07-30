@@ -6,3 +6,5 @@ liveUrl: "https://amplify-wow.com"
 tags: ["Astro", "React", "Tailwind CSS", "TypeScript", "JavaScript"]
 publishDate: 2024-05-02
 ---
+This is a technical breakdown of Amplify WoW. If you're interested in my motivations behind the project, please refer to this article. 
+
